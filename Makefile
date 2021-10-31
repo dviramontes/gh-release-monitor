@@ -4,7 +4,7 @@ ci:
 	clj -T:build ci
 
 run:
-	clj -M:run
+	clj -M:run-main
 
 repl:
 	clj -M:repl

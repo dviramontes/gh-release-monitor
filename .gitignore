@@ -26,3 +26,4 @@
 /classes
 /target
 pg-data
+secrets.edn

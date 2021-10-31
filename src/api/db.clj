@@ -1,7 +1,7 @@
 (ns api.db
   (:require
-    [clj-time.core :as time]
-    [hugsql.core :as hugsql]))
+   [clj-time.core :as time]
+   [hugsql.core :as hugsql]))
 
 ;; avoids lint warnings of unresolved symbol by clj-kondo
 (declare create-repos-table!)

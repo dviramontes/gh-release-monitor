@@ -1,11 +1,9 @@
 (ns api.main
-  (:gen-class))
+  (:require  [aero.core :as aero]))
 
-(defn greet
-  "Callable entry point to the application."
-  [data]
-  (println (str "Hello, " (or (:name data) "World") "!")))
+(defn read-config [profile]
+  (aero/read-config "config.edn" {:profile profile}))
 
-(defn -main
-  [& args]
-  (greet {:name (first args)}))
+(defn -main [& args]
+  (let [config (read-config :dev)]
+    (prn (-> config :api/config))))
