@@ -1,6 +1,6 @@
-(ns dviramontes.gh-release-monitor-test
+(ns api.main-test
   (:require [clojure.test :refer :all]
-            [dviramontes.gh-release-monitor :refer :all]))
+            [api.main :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

@@ -1,0 +1,3 @@
+{:store         :database
+ :migration-dir "migrations"
+ :db            "postgres://postgres:postgres@127.0.0.1:5432/github-release-monitor?sslmode=disable"}
