@@ -1,6 +1,8 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.3"}
-        org.postgresql/postgresql {:mvn/version "42.3.1"}}
+        org.postgresql/postgresql {:mvn/version "42.3.1"}
+        clj-time/clj-time         {:mvn/version "0.15.2"}
+        com.layerware/hugsql {:mvn/version "0.5.1"}}
  :aliases
  {:run-m {:main-opts ["-m" "api.main"]}
   :run-x {:ns-default api.main
@@ -17,6 +19,9 @@
               :main-opts  ["-m" "clj-kondo.main"]}
   :cljfmt    {:extra-deps {cljfmt/cljfmt {:mvn/version "0.8.0"}}
               :main-opts  ["-m" "cljfmt.main"]}
+  :repl      {:extra-paths ["dev"]
+              :extra-deps  {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
+                            integrant/repl             {:mvn/version "0.3.2"}}}
   :migratus
   {:extra-deps
    {orangefoxcollective/clj-migratus {:mvn/version "0.1.0"}
