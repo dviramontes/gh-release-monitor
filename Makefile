@@ -1,4 +1,4 @@
-.PHONY: ci run repl jar run-infra stop-infra test lint migrations format
+.PHONY: ci run repl jar run-infra stop-infra test lint migrations format build
 
 ci:
 	clj -T:build ci
@@ -8,6 +8,9 @@ run:
 
 repl:
 	clj -M:repl
+
+build:
+	@make jar
 
 jar:
 	clj -T:build jar
