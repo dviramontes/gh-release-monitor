@@ -14,4 +14,5 @@
    :user        "postgres"
    :password    "postgres"})
 
+;; bootstrap SQL functions
 (hugsql/def-db-fns "sql/releases.sql")

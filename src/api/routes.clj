@@ -11,17 +11,30 @@
 
 (def repos
   ["/repos"
-   ["" {:get handlers/get-repos}]])
+   ["/search"
+    {:get
+     {:parameters {:query
+                   {:q    s/Str
+                    (s/optional-key :per-page) s/Int}}
+      :handler handlers/search-repos}}]])
 
-(def search
-  ["/search"
-   {:get
-    {:parameters {:query
-                  {:q    s/Str
-                   (s/optional-key :per-page) s/Int}}
-     :handler handlers/search-repos}}])
+(def releases
+  ["/releases"
+   ["" {:get handlers/get-releases}]
+   ["/follow/:owner/:repo"
+    {:parameters {:path {:owner s/Str :repo s/Str}}
+     :post handlers/follow-repo}]
+   ["/latest/:owner/:repo"
+    {:parameters {:path {:owner s/Str :repo s/Str}}
+     :post handlers/latest-release}]])
+
+(def webhooks
+  ["/webhooks"
+   ["/releases"
+    {:post  {:handler handlers/update-releases}}]])
 
 (def api
   ["/api"
    repos
-   search])
+   releases
+   webhooks])
