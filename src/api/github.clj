@@ -1,6 +1,7 @@
 (ns api.github
   (:require [org.httpkit.client :as http]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log]))
 
 (def endpoints
   {:repo-search
@@ -22,8 +23,10 @@
         endpoint (format (endpoints :repo-search) query page-size)
         {:keys [body error status]} @(http/get endpoint opts)]
     (if (= status 200)
-      (json/read-str body :key-fn keyword)
-      error)))
+      {:result (json/read-str body :key-fn keyword)}
+      (do
+        (log/error error "failed to search-repos:")
+        {:error error}))))
 
 (defn latest-release
   [token owner repo]
@@ -31,8 +34,10 @@
         endpoint (format (endpoints :latest-release) owner repo)
         {:keys [body error status]} @(http/get endpoint opts)]
     (if (= status 200)
-      (json/read-str body :key-fn keyword)
-      error)))
+      {:result (json/read-str body :key-fn keyword)}
+      (do
+        (log/error error "failed to retrieve latest release:")
+        {:error error}))))
 
 (defn create-webhook [token]
   (let [opts {:headers (merge content-type-header (with-auth-header token))

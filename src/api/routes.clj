@@ -23,7 +23,7 @@
    ["" {:get handlers/get-releases}]
    ["/follow/:owner/:repo"
     {:parameters {:path {:owner s/Str :repo s/Str}}
-     :post handlers/follow-repo}]
+     :post       handlers/follow-releases}]
    ["/latest/:owner/:repo"
     {:parameters {:path {:owner s/Str :repo s/Str}}
      :post handlers/latest-release}]])
