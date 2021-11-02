@@ -18,5 +18,5 @@
   (reset))
 
 (comment
-  (db/create-repos-table! db/config)
-  (db/drop-repos-table! db/config))
+  (db/create-releases-table! db/config)
+  (db/drop-releases-table! db/config))

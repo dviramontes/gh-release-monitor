@@ -4,8 +4,8 @@
    [hugsql.core :as hugsql]))
 
 ;; avoids lint warnings of unresolved symbol by clj-kondo
-(declare create-repos-table!)
-(declare drop-repos-table!)
+(declare create-releases-table!)
+(declare drop-releases-table!)
 
 (def config
   {:classname   "org.postgresql.Driver"
@@ -14,4 +14,4 @@
    :user        "postgres"
    :password    "postgres"})
 
-(hugsql/def-db-fns "sql/repos.sql")
+(hugsql/def-db-fns "sql/releases.sql")

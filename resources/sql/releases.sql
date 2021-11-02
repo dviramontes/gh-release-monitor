@@ -1,6 +1,6 @@
--- :name create-repos-table! :!
--- :doc creates repos table
-create table if not exists repos
+-- :name create-releases-table! :!
+-- :doc creates releases table
+create table if not exists releases
 (
     id                         serial primary key,
     created_at                 timestamptz not null default now(),
@@ -9,6 +9,6 @@ create table if not exists repos
     name                       varchar(128) not null default ''
 );
 
--- :name drop-repos-table! :! :n
--- :doc drops repos table
-drop table repos;
+-- :name drop-releases-table! :! :n
+-- :doc drops releases table
+drop table releases;
