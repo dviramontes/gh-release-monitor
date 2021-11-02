@@ -1,4 +1,4 @@
-.PHONY: ci run repl jar up down test lint migrations format
+.PHONY: ci run repl jar run-infra stop-infra test lint migrations format
 
 ci:
 	clj -T:build ci
@@ -12,10 +12,10 @@ repl:
 jar:
 	clj -T:build jar
 
-up:
+run-infra:
 	docker-compose up -d
 
-down:
+stop-infra:
 	docker-compose down
 
 test:
