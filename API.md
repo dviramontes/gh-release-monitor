@@ -6,6 +6,10 @@
 ```shell
 curl "http://localhost:4000/ping"
 ```
+response:
+```
+pong
+```
 
 ## Repos
 
@@ -18,6 +22,12 @@ Query Params:
 ```shell
 curl "http://localhost:4000/api/repos/search?q=honeysql&per-page=1"
 ```
+response:
+```json
+{
+  "query": "honeysql", "repos": [...], "per-page": 1
+}
+```
 
 ## Releases
 
@@ -27,14 +37,29 @@ Returns a list of all tracked releases
 curl "http://localhost:4000/api/releases"
 ```
 
+response:
+```json
+{
+  "releases": [...]
+}
+```
+
 ### POST /api/releases/follow/:owner/:repo
 Creates a new release to follow
 ```shell
-curl "http://localhost:4000/api/releases/facebook/react"
+curl "http://localhost:4000/api/releases/follow/facebook/react"
+```
+response:
+```json
+{"owner":"facebook","repo":"react","release":{"id":1,"created_at":"2021-11-02T05:35:39Z","updated_at":"2021-11-02T05:35:39Z","deleted_at":null,"owner":"facebook","repo":"c","body":""}}
 ```
 
 ### GET /api/releases/latest/:owner/:repo
 Returns the latest release for a given repo
 ```shell
 curl "http://localhost:4000/api/releases/facebook/react"
+```
+response:
+```json
+{"owner":"facebook","repo":"react","latest":[...]}
 ```

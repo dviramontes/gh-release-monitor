@@ -1,4 +1,4 @@
-.PHONY: ci run repl jar run-infra stop-infra test lint migrations format build
+.PHONY: ci run repl jar run-infra stop-infra test lint migrations format build deps
 
 ci:
 	clj -T:build ci
@@ -32,3 +32,6 @@ migrations:
 
 format:
 	clj -M:cljfmt fix
+
+deps:
+	clj -X:deps prep
