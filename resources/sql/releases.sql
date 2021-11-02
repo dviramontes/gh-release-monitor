@@ -29,3 +29,8 @@ insert into releases (
 -- :name get-releases :? :*
 -- :doc retrieves all release records
 select * from releases;
+
+-- :name delete-release! :! :n
+-- :doc deletes a release record given the id
+delete from releases
+where id = :id;

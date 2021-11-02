@@ -41,6 +41,13 @@
                           :release release}}
       {:status 500 :body {:error (:error result?)}})))
 
+;; TODO: destroy webhook (sender)
+(defn unfollow-releases [req]
+  (let [id (-> req :parameters :path :id)]
+    (case (db/delete-release! db/config {:id id})
+      1 {:status 200 :body (format "release id: %d removed successfully" id)}
+      0 {:status 404 :body (format "release id: %d not found" id)})))
+
 ;; TODO: add webhook handler (receiver)
 (defn update-releases [req]
   (let [token (-> req :reitit.core/match :data :github-token)

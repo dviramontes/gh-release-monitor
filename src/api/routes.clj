@@ -24,6 +24,9 @@
    ["/follow/:owner/:repo"
     {:parameters {:path {:owner s/Str :repo s/Str}}
      :post       handlers/follow-releases}]
+   ["/unfollow/:id"
+    {:parameters {:path {:id s/Int}}
+     :delete       handlers/unfollow-releases}]
    ["/latest/:owner/:repo"
     {:parameters {:path {:owner s/Str :repo s/Str}}
      :post handlers/latest-release}]])
