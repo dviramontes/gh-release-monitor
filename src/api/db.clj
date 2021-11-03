@@ -10,6 +10,7 @@
 (declare create-release!)
 (declare get-releases)
 (declare delete-release!)
+(declare get-release-by-id)
 
 (def config
   {:classname   "org.postgresql.Driver"

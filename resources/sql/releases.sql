@@ -9,6 +9,7 @@ create table if not exists releases
     owner                      varchar(128) not null default '',
     repo                       varchar(128) not null default '',
     body                       TEXT not null default '',
+    details                    jsonb not null default '{}'
     UNIQUE                     (owner, repo)
 );
 
@@ -33,4 +34,9 @@ select * from releases;
 -- :name delete-release! :! :n
 -- :doc deletes a release record given the id
 delete from releases
+where id = :id;
+
+-- :name get-release-by-id :? :1
+-- :doc retrieves a release record by id
+select * from releases
 where id = :id;

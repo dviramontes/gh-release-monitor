@@ -1,5 +1,6 @@
 {:api/config
  {:secrets      #include #join [#env CWD "./secrets.edn"]
   :github-token #profile {:dev #ref [:api/config :secrets :github-token]}
+  :callback-url #profile {:dev #ref [:api/config :secrets :callback-url]}
   :port         #profile {:dev  4000
                           :prod 8080}}}
