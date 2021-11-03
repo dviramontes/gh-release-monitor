@@ -1,5 +1,6 @@
 (ns api.db
   (:require
+   [api.jdbc]
    [clojure.tools.logging :as log]
    [try-let :refer [try-let]]
    [hugsql.core :as hugsql]))
@@ -25,9 +26,9 @@
 (defn create-release-record!
   "convenience wrapper for create-release!, attempts to handle
   SQL exception and returns either a {:result result} | {:error error}"
-  [owner repo]
+  [owner repo details]
   (try-let
-   [result (create-release! config {:owner owner :repo repo})]
+   [result (create-release! config {:owner owner :repo repo :details details})]
    {:result result}
    (catch
     Exception e (str "ERROR: duplicate key value violates unique constraint" (.getMessage e))

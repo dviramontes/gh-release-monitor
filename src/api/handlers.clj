@@ -1,8 +1,6 @@
 (ns api.handlers
   (:require [api.db :as db]
-            [api.github :as github]
-            [clojure.data.json :as json]
-            [clojure.tools.logging :as log]))
+            [api.github :as github]))
 
 (defn get-releases [_]
   {:status 200 :body {:releases (db/get-releases db/config)}})
@@ -32,14 +30,18 @@
       {:status 500 :body {:error (:error result?)}})))
 
 (defn follow-releases [req]
-  (let [owner (-> req :parameters :path :owner)
-        repo (-> req :parameters :path :repo)]
-    (let [result? (db/create-release-record! owner repo)]
-      (if-let [[release] (:result result?)]
-        {:status 200 :body {:owner owner
-                            :repo repo
-                            :release release}}
-        {:status 500 :body {:error (:error result?)}}))))
+  (let [token (-> req :reitit.core/match :data :github-token)
+        owner (-> req :parameters :path :owner)
+        repo (-> req :parameters :path :repo)
+        result? (github/latest-release token owner repo)]
+    (if-let [latest (:result result?)]
+      (let [result? (db/create-release-record! owner repo (first latest))]
+        (if-let [[release] (:result result?)]
+          {:status 200 :body {:owner owner
+                              :repo repo
+                              :release release}}
+          {:status 500 :body {:error (:error result?)}}))
+      {:status 500 :body {:error (:error result?)}})))
 
 (defn unfollow-releases [req]
   (let [id (-> req :parameters :path :id)]

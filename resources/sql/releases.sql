@@ -8,8 +8,7 @@ create table if not exists releases
     deleted_at                 timestamptz,
     owner                      varchar(128) not null default '',
     repo                       varchar(128) not null default '',
-    body                       TEXT not null default '',
-    details                    jsonb not null default '{}'
+    details                    jsonb not null default '{}',
     UNIQUE                     (owner, repo)
 );
 
@@ -21,10 +20,12 @@ drop table releases;
 -- :doc creates a new release record
 insert into releases (
     owner,
-    repo
+    repo,
+    details
 ) values (
     :owner,
-    :repo
+    :repo,
+    :details
 ) returning *;
 
 -- :name get-releases :? :*
