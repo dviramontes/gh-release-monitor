@@ -19,14 +19,15 @@ src
     └── routes.clj      # API routes
 ```
 
-- [For a list of endpoints supported by this API refer to this doc.](./API.md)
-- [For this project's KANBAN board follow this link.](https://github.com/dviramontes/gh-release-monitor/projects/1)
+- For a list of endpoints supported by this API refer to [this doc.](./API.md) Also available via **swagger** at [http://localhost:4000/](http://localhost:4000/index.html)
+- For this project's KANBAN board follow [this link.](https://github.com/dviramontes/gh-release-monitor/projects/1)
 
 ### Requirements
 
 - Java8+
 - Clojure
 - Docker
+- [Ngrok](https://ngrok.com/) (optional for development)
 
 ### Setup
 
@@ -34,13 +35,20 @@ src
 1. `touch secrets.edn` (.gitignored)
 2. add your github token in this format
 ```clojure
-{:github-token "top-secret"}
+{
+ :github-token "top-secret"             ;; used for GitHub API requests 
+ :callback-url "http://foobar.ngrok.io" ;; used for creating GitHub Release Event Webhooks against specific repos
+}
 ```
 
 ### Development
 
 1. `make up` # spins up docker-compose
-2. `make run` # runs code locally
+2. `make migrations` # runs migrations up
+3. `make run` # runs code locally
+4. `ngrok http 4000` # runs proxy tunnel so that github can call us back with release event data
+
+**Note:** [ngrok](https://ngrok.com/) is not required you can use any other tunneling utility out there. Ngrok is probably the easiest.   
 
 #### Running with REPL
 

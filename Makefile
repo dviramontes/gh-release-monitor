@@ -28,7 +28,8 @@ lint:
 	clj -M:clj-kondo --lint src
 
 migrations:
-	@echo "FIX ME"
+	@echo "running migrations"
+	clj -X:run-migrate
 
 format:
 	clj -M:cljfmt fix

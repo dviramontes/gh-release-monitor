@@ -1,17 +1,18 @@
 (ns api.main
-  (:require  [aero.core :as aero]
-             [api.routes :as routes]
-             [ring.adapter.jetty :as jetty]
-             [muuntaja.core :as m]
-             [reitit.ring.coercion :as rrc]
-             [reitit.coercion.spec]
-             [reitit.ring.middleware.exception :as exm]
-             [reitit.ring.middleware.parameters :as parm]
-             [reitit.ring.middleware.muuntaja :as muu]
-             [reitit.swagger-ui :as swagger-ui]
-             [reitit.coercion.schema]
-             [reitit.ring :as ring]
-             [integrant.core :as ig]))
+  (:require [aero.core :as aero]
+            [api.routes :as routes]
+            [ring.adapter.jetty :as jetty]
+            [muuntaja.core :as m]
+            [reitit.ring.coercion :as rrc]
+            [reitit.coercion.spec]
+            [reitit.ring.middleware.exception :as exm]
+            [reitit.ring.middleware.parameters :as parm]
+            [reitit.ring.middleware.muuntaja :as muu]
+            [reitit.swagger-ui :as swagger-ui]
+            [reitit.coercion.schema]
+            [reitit.ring :as ring]
+            [integrant.core :as ig]
+            [api.db :as db]))
 
 (defn read-config [profile]
   (aero/read-config "config.edn" {:profile profile}))
@@ -57,6 +58,11 @@
      {:path "/"})
     (ring/create-default-handler
      {:not-found (constantly {:status 404 :body "route not found"})}))))
+
+(defn run-migrations [args]
+  (case (:direction args)
+    "up" (db/create-releases-table! db/config)
+    "down" (db/drop-releases-table! db/config)))
 
 (defn -main []
   (ig/init system-config))
