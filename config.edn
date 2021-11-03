@@ -1,5 +1,7 @@
 {:api/config
- {:secrets      #include #join [#env CWD "./secrets.edn"]
-  :github-token #profile {:dev #ref [:api/config :secrets :github-token]}
-  :port         #profile {:dev  4000
-                          :prod 8080}}}
+ {:secrets          #include #join [#env CWD "./secrets.edn"]
+  :github-token     #profile {:dev #ref [:api/config :secrets :github-token]}
+  :refresh-interval #profile {:dev  1/60
+                              :prod 1}
+  :port             #profile {:dev  4000
+                              :prod 8080}}}

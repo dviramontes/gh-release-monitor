@@ -16,13 +16,10 @@
   "Converts hours -> milliseconds"
   [n] (* n 3.6e+6))
 
-(def interval (hours (/ 1 60)))
-
 (defn task-wrapper [token]
   (let [releases (db/get-releases db/config)]
     (when (> (count releases) 0)
       (doseq [{:keys [owner repo]} releases]
-        ;; update release details
         (let [result? (github/latest-release token owner repo)]
           (if-let [[release] (:result result?)]
             (let [result? (db/create-release-record! owner repo release)]
@@ -32,11 +29,12 @@
             (log/error (:error result?))))))))
 
 (defn start
-  [token]
+  [token interval]
+  (log/info (format "refreshing every %s hours" interval))
   (go
     (log/info (format "cronjob scheduled: %s" (now)))
     (while @running
-      (<! (timeout interval))
+      (<! (timeout (hours interval)))
       (log/info (format "cronjob started: %s" (now)))
       (task-wrapper token)
       (log/info (format "cronjob completed: %s" (now))))))

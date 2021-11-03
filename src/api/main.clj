@@ -61,7 +61,8 @@
      {:not-found (constantly {:status 404 :body "route not found"})}))))
 
 (defmethod ig/init-key :api/tasks [_ {:keys [config]}]
-  (api.cron/start (-> config :api/config :github-token)))
+  (api.cron/start (-> config :api/config :github-token)
+                  (-> config :api/config :refresh-interval)))
 
 (defn run-migrations [args]
   (case (:direction args)
