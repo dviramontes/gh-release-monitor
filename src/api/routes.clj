@@ -2,7 +2,15 @@
   (:require
    [api.handlers :as handlers]
    [reitit.coercion.schema]
-   [schema.core :as s]))
+   [schema.core :as s]
+   [reitit.swagger :as swagger]))
+
+(def swagger
+  ["/swagger.json"
+   {:get {:handler (swagger/create-swagger-handler)
+          :no-doc true
+          :swagger {:title "GH Release Monitor API"
+                    :description "Monitors repos for releases via GitHub API"}}}])
 
 ;; obligatory health check
 (def ping

@@ -8,6 +8,7 @@
              [reitit.ring.middleware.exception :as exm]
              [reitit.ring.middleware.parameters :as parm]
              [reitit.ring.middleware.muuntaja :as muu]
+             [reitit.swagger-ui :as swagger-ui]
              [reitit.coercion.schema]
              [reitit.ring :as ring]
              [integrant.core :as ig]))
@@ -38,20 +39,22 @@
   (ring/ring-handler
    (ring/router
     [routes/ping
+     routes/swagger
      routes/api]
     {:data {:github-token (-> config :api/config :github-token)
+            :callback-url (-> config :api/config :callback-url)
             :coercion reitit.coercion.schema/coercion
             :muuntaja    m/instance
             :middleware  [parm/parameters-middleware
-                          muu/format-negotiate-middleware
-                          muu/format-response-middleware
+                          muu/format-middleware
                           exm/exception-middleware
-                          muu/format-request-middleware
                           rrc/coerce-exceptions-middleware
                           rrc/coerce-request-middleware
                           rrc/coerce-response-middleware]}})
    (ring/routes
     (ring/redirect-trailing-slash-handler)
+    (swagger-ui/create-swagger-ui-handler
+     {:path "/"})
     (ring/create-default-handler
      {:not-found (constantly {:status 404 :body "route not found"})}))))
 
