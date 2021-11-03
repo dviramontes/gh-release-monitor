@@ -26,7 +26,10 @@ insert into releases (
     :owner,
     :repo,
     :details
-) returning *;
+) on conflict (owner, repo) do update set
+  updated_at = now(),
+  details    = :details
+  returning *;
 
 -- :name get-releases :? :*
 -- :doc retrieves all release records

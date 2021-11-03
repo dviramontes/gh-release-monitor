@@ -1,6 +1,8 @@
 (ns api.main
-  (:require [aero.core :as aero]
+  (:require [api.cron]
+            [api.db :as db]
             [api.routes :as routes]
+            [aero.core :as aero]
             [ring.adapter.jetty :as jetty]
             [muuntaja.core :as m]
             [reitit.ring.coercion :as rrc]
@@ -11,8 +13,7 @@
             [reitit.swagger-ui :as swagger-ui]
             [reitit.coercion.schema]
             [reitit.ring :as ring]
-            [integrant.core :as ig]
-            [api.db :as db]))
+            [integrant.core :as ig]))
 
 (defn read-config [profile]
   (aero/read-config "config.edn" {:profile profile}))
@@ -22,7 +23,8 @@
    :api/jetty   {:port    4000
                  :join?   false
                  :handler (ig/ref :api/handler)}
-   :api/handler {:config (ig/ref :api/config)}})
+   :api/handler {:config (ig/ref :api/config)}
+   :api/tasks   {:config (ig/ref :api/config)}})
 
 (defmethod ig/init-key :api/config [_ _]
   ;; can be set :prod or :test to load diff configs at runtime
@@ -43,7 +45,6 @@
      routes/swagger
      routes/api]
     {:data {:github-token (-> config :api/config :github-token)
-            :callback-url (-> config :api/config :callback-url)
             :coercion reitit.coercion.schema/coercion
             :muuntaja    m/instance
             :middleware  [parm/parameters-middleware
@@ -58,6 +59,9 @@
      {:path "/"})
     (ring/create-default-handler
      {:not-found (constantly {:status 404 :body "route not found"})}))))
+
+(defmethod ig/init-key :api/tasks [_ {:keys [config]}]
+  (api.cron/start (-> config :api/config :github-token)))
 
 (defn run-migrations [args]
   (case (:direction args)

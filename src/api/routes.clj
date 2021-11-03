@@ -37,7 +37,7 @@
      :delete       handlers/unfollow-releases}]
    ["/latest/:owner/:repo"
     {:parameters {:path {:owner s/Str :repo s/Str}}
-     :post handlers/latest-release}]])
+     :get handlers/latest-release}]])
 
 (def api
   ["/api"

@@ -2,7 +2,6 @@
 
 > A restful API project for monitoring github releases
 
-
 ### Project Layout
 
 ```
@@ -12,10 +11,12 @@ dev
 └── user.clj            # utilities for repl driven development (see make repl)
 src
 └── api
-    ├── github.clj      # functions for interacting with github API
-    ├── main.clj        # app's main entry and middleware configurations       
     ├── db.clj          # DB config details
-    ├── handlers.clj    # handlers that interact with the DB       
+    ├── cron.clj        # routine-like job for refreshing releases in db
+    ├── handlers.clj    # handlers that interact with the DB     
+    ├── github.clj      # functions for interacting with github API
+    ├── jdbc.clj        # support for various SQL <> Clojure data types  
+    ├── main.clj        # app's main entry and middleware configurations       
     └── routes.clj      # API routes
 ```
 
