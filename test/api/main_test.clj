@@ -46,5 +46,21 @@
         (let [release (second releases)]
           (is (= (release :owner) "lispyclouds"))
           (is (= (release :repo) "contajners"))
-          (is (not (empty? (release :details)))))))))
+          (is (not (empty? (release :details))))
+          (is (= (get-in release [:details "tag-name"]) "1.1.1"))))))
 
+  (testing "remove a release via endpoint (unfollow)"
+    (let [resp (handlers/unfollow-release {:parameters {:path {:id 1}}})
+          releases (db/get-releases db/config)]
+      (is (= (:status resp) 200))
+      (is (= (count releases) 1))))
+
+  (testing "search a repo via endpoint"
+    (with-redefs [api.github/search-repos (fn [_ _ _] {:result [{:owner "lispyclouds" :repo "contajners"}]})]
+      (let [resp (handlers/search-repos {:parameters {:query {:q "lispyclouds"}}})]
+        (is (= (:status resp) 200))
+        (is (= resp {:status 200
+                     :body
+                     {:query "lispyclouds"
+                      :repos [{:owner "lispyclouds", :repo "contajners"}]
+                      :per-page 1}}))))))
