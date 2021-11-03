@@ -35,9 +35,7 @@ src
 1. `touch secrets.edn` (.gitignored)
 2. add your github token in this format
 ```clojure
-{
- :github-token "top-secret"             ;; used for GitHub API requests
-}
+{:github-token "top-secret"}  ;; used for GitHub API requests
 ```
 
 ### Development

@@ -22,7 +22,9 @@ stop-infra:
 	docker-compose down
 
 test:
-	clj -T:build test
+	docker-compose -f ./docker-compose.test.yaml build
+	docker-compose -f ./docker-compose.test.yaml up -d && clj -T:build test
+	docker-compose -f ./docker-compose.test.yaml down
 
 lint:
 	clj -M:clj-kondo --lint src
