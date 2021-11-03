@@ -29,10 +29,10 @@
                           :latest latest}}
       {:status 500 :body {:error (:error result?)}})))
 
-(defn follow-releases [req]
+(defn follow-release [req]
   (let [token (-> req :reitit.core/match :data :github-token)
-        owner (-> req :parameters :path :owner)
-        repo (-> req :parameters :path :repo)
+        owner (-> req :parameters :body :owner)
+        repo (-> req :parameters :body :repo)
         result? (github/latest-release token owner repo)]
     (if-let [latest (:result result?)]
       (let [result? (db/create-release-record! owner repo (first latest))]
@@ -43,7 +43,7 @@
           {:status 500 :body {:error (:error result?)}}))
       {:status 500 :body {:error (:error result?)}})))
 
-(defn unfollow-releases [req]
+(defn unfollow-release [req]
   (let [id (-> req :parameters :path :id)]
     (case (db/delete-release! db/config {:id id})
       1 {:status 200 :body (format "release id: %d removed successfully" id)}

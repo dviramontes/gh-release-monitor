@@ -29,12 +29,13 @@
 (def releases
   ["/releases"
    ["" {:get handlers/get-releases}]
-   ["/follow/:owner/:repo"
-    {:parameters {:path {:owner s/Str :repo s/Str}}
-     :post       handlers/follow-releases}]
+   ["/follow"
+    {:parameters {:body {:owner s/Str
+                         :repo  s/Str}}
+     :post       handlers/follow-release}]
    ["/unfollow/:id"
     {:parameters {:path {:id s/Int}}
-     :delete       handlers/unfollow-releases}]
+     :delete     handlers/unfollow-release}]
    ["/latest/:owner/:repo"
     {:parameters {:path {:owner s/Str :repo s/Str}}
      :get handlers/latest-release}]])

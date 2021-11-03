@@ -44,10 +44,10 @@ response:
 }
 ```
 
-### POST /api/releases/follow/:owner/:repo
+### POST /api/releases/follow
 Creates a new release to follow
 ```shell
-curl "http://localhost:4000/api/releases/follow/facebook/react"
+curl "http://localhost:4000/api/releases/follow" -d $'{"owner": "facebook", "repo": "react"}'
 ```
 response:
 ```json

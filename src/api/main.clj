@@ -13,7 +13,8 @@
             [reitit.swagger-ui :as swagger-ui]
             [reitit.coercion.schema]
             [reitit.ring :as ring]
-            [integrant.core :as ig]))
+            [integrant.core :as ig]
+            [clojure.tools.logging :as log]))
 
 (defn read-config [profile]
   (aero/read-config "config.edn" {:profile profile}))
@@ -31,7 +32,7 @@
   (read-config :dev))
 
 (defmethod ig/init-key :api/jetty [_ {:keys [port join? handler]}]
-  (println (format "server listening on port: %d" port))
+  (log/info (format "server listening on port: %d" port))
   (jetty/run-jetty handler {:port port :join? join?}))
 
 ;; side-effect-al
