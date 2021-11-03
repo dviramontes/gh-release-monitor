@@ -32,44 +32,20 @@
       {:status 500 :body {:error (:error result?)}})))
 
 (defn follow-releases [req]
-  (let [token (-> req :reitit.core/match :data :github-token)
-        owner (-> req :parameters :path :owner)
-        repo (-> req :parameters :path :repo)
-        create-webhook-request (github/create-webhook token callback-url owner repo)]
-    ;; if webhook-callback-url; issue create webhook url
-    (prn create-webhook-request)
+  (let [owner (-> req :parameters :path :owner)
+        repo (-> req :parameters :path :repo)]
     (let [result? (db/create-release-record! owner repo)]
       (if-let [[release] (:result result?)]
         {:status 200 :body {:owner owner
                             :repo repo
                             :release release}}
-        {:status 500 :body {:error (:error result?)}}))
-    ))
+        {:status 500 :body {:error (:error result?)}}))))
 
 (defn unfollow-releases [req]
-  (let [token (-> req :reitit.core/match :data :github-token)
-        id (-> req :parameters :path :id)]
-    (if-let [{:keys [owner repo webhook-id]} (db/get-release-by-id db/config {:id id})]
-      (let [result? (github/delete-webhook token owner repo webhook-id)]
-        (if (:result result?)
-          (case (db/delete-release! db/config {:id id})
-            1 {:status 200 :body (format "release id: %d removed successfully" id)}
-            0 {:status 404 :body (format "release id: %d not found" id)})
-          {:status (:status result?) :body {:error (:message result?)}}))
-      {:status 404 :body (format "release id: %d not found" id)})))
-
-(defn update-releases [req]
-  (let [github-event (get-in req [:headers "x-github-event"])
-        github-hook-id (-> (get-in req [:headers "x-github-hook-id"]) Integer/parseInt)]
-    (case github-event
-      ;; tell GitHub we're alive and well
-      "ping" {:status 200 :body nil}
-      ;; this one has the goods :)
-      "release"
-      (let [body (json/read-str req :key-fn keyword)]
-        (log/info body "update-releases from webhook")
-        ;; update record with release info
-        {:status 200 :body nil}))))
+  (let [id (-> req :parameters :path :id)]
+    (case (db/delete-release! db/config {:id id})
+      1 {:status 200 :body (format "release id: %d removed successfully" id)}
+      0 {:status 404 :body (format "release id: %d not found" id)})))
 
 
 

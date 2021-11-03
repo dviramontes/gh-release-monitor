@@ -27,7 +27,6 @@ src
 - Java8+
 - Clojure
 - Docker
-- [Ngrok](https://ngrok.com/) (optional for development)
 
 ### Setup
 
@@ -36,8 +35,7 @@ src
 2. add your github token in this format
 ```clojure
 {
- :github-token "top-secret"             ;; used for GitHub API requests 
- :callback-url "http://foobar.ngrok.io" ;; used for creating GitHub Release Event Webhooks against specific repos
+ :github-token "top-secret"             ;; used for GitHub API requests
 }
 ```
 
@@ -46,9 +44,6 @@ src
 1. `make up` # spins up docker-compose
 2. `make migrations` # runs migrations up
 3. `make run` # runs code locally
-4. `ngrok http 4000` # runs proxy tunnel so that github can call us back with release event data
-
-**Note:** [ngrok](https://ngrok.com/) is not required you can use any other tunneling utility out there. Ngrok is probably the easiest.   
 
 #### Running with REPL
 

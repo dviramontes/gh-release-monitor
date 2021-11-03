@@ -39,13 +39,7 @@
     {:parameters {:path {:owner s/Str :repo s/Str}}
      :post handlers/latest-release}]])
 
-(def webhooks
-  ["/webhooks"
-   ["/releases"
-    {:post  {:handler handlers/update-releases}}]])
-
 (def api
   ["/api"
    repos
-   releases
-   webhooks])
+   releases])

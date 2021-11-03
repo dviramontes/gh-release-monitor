@@ -45,7 +45,7 @@ response:
 ```
 
 ### POST /api/releases/follow/:owner/:repo
-Creates a new release to follow, creates webhook for [ReleaseEvent](https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#releaseevent) notification
+Creates a new release to follow
 ```shell
 curl "http://localhost:4000/api/releases/follow/facebook/react"
 ```
@@ -55,7 +55,7 @@ response:
 ```
 
 ### DELETE /api/releases/unfollow/:id
-Removes a release to follow from db, destroys webhook in the process
+Removes a release to follow from db
 ```shell
 curl "http://localhost:4000/api/releases/unfollow/1"
 ```
