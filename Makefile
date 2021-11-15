@@ -1,5 +1,5 @@
 .PHONY: ci run repl jar run-infra stop-infra test lint migrations format build deps
-.PHONY: docker.build docker.run
+.PHONY: docker.build docker.run backend.shell
 
 ci:
 	clj -T:build ci
@@ -10,11 +10,14 @@ run:
 repl:
 	clj -M:repl
 
+backend.shell:
+	docker-compose run backend bash
+
 docker.run:
-	docker run -it -p 8080:8080 --env ENVIRONMENT=${ENVIRONMENT} --env GITHUB_TOKEN=${GITHUB_TOKEN} gh-release-monitor:latest
+	docker run -it --rm -f ./path/file -p 8080:8080 --env ENVIRONMENT=${ENVIRONMENT} --env GITHUB_TOKEN=${GITHUB_TOKEN} gh-release-monitor
 
 docker.build:
-	docker build --no-cache --build-arg ENVIRONMENT --build-arg GITHUB_TOKEN -t gh-release-monitor:latest .
+	docker build --no-cache --build-arg ENVIRONMENT --build-arg GITHUB_TOKEN -t gh-release-monitor .
 
 build:
 	@make jar
@@ -24,6 +27,7 @@ jar:
 	clj -T:build jar
 
 run-infra:
+	docker-compose build --no-cache
 	docker-compose up -d
 
 stop-infra:
