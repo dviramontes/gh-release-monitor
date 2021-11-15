@@ -4,6 +4,7 @@ services:
     labels:
       shipyard.route: "/"
       shipyard.init: "make migrations"
+      shipyard.liveness.http.path: "/ping"
     build: "."
     environment:
       ENVIRONMENT: "prod"
