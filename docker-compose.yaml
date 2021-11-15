@@ -10,6 +10,7 @@ services:
       - postgres
     environment:
       ENVIRONMENT: "prod"
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
     ports:
       - "8080:8080"
 
