@@ -1,4 +1,5 @@
 .PHONY: ci run repl jar run-infra stop-infra test lint migrations format build deps
+.PHONY: docker.build docker.run
 
 ci:
 	clj -T:build ci
@@ -9,8 +10,15 @@ run:
 repl:
 	clj -M:repl
 
+docker.run:
+	docker run -it -p 8080:8080 --env ENVIRONMENT=${ENVIRONMENT} --env GITHUB_TOKEN=${GITHUB_TOKEN} gh-release-monitor:latest
+
+docker.build:
+	docker build --no-cache --build-arg ENVIRONMENT --build-arg GITHUB_TOKEN -t gh-release-monitor:latest .
+
 build:
 	@make jar
+	@make docker.build
 
 jar:
 	clj -T:build jar

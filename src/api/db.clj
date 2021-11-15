@@ -16,7 +16,7 @@
 (def config
   {:classname   "org.postgresql.Driver"
    :subprotocol "postgres"
-   :subname     "//127.0.0.1:5432/github-release-monitor"
+   :subname     "//postgres:5432/github-release-monitor"
    :user        "postgres"
    :password    "postgres"})
 
@@ -30,10 +30,10 @@
   (try-let
    [result (create-release! config {:owner owner :repo repo :details details})]
    {:result result}
-   (catch
-    Exception e (str "ERROR: duplicate key value violates unique constraint" (.getMessage e))
-    (log/warn "duplicate key constrain")
-    {:error (.getMessage e)})
+   (catch Exception e
+     (str "ERROR: duplicate key value violates unique constraint" (.getMessage e))
+     (log/warn "duplicate key constrain")
+     {:error (.getMessage e)})
    (catch Exception e
      (log/error e "watch out!")
      {:error e})))

@@ -1,0 +1,9 @@
+.clj-kondo
+.idea
+.lsp
+.settings
+.vscode
+pg-data
+pg-data-test
+test
+target/classes

@@ -1,9 +1,16 @@
 version: '3.8'
 services:
+  backend:
+    labels:
+      shipyard.route: "/"
+      shipyard.init: "make migrations"
+    build: "."
+    environment:
+      ENVIRONMENT: "prod"
+    ports:
+      - "8080:8080"
+
   postgres:
-    container_name: "github-release-monitor-postgres"
-    networks:
-      - github-release-monitor
     image: postgres:14
     restart: always
     environment:
@@ -11,12 +18,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     command: postgres -c 'max_connections=500'
     volumes:
       - ./pg-data:/var/lib/postgresql/data
+
 volumes:
   pg-data:
-
-networks:
-  github-release-monitor:
+    labels:
+      shipyard.deploy.disk.size: 1Gi

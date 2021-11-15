@@ -1,4 +1,5 @@
 (ns api.main
+  (:gen-class)
   (:require [api.cron]
             [api.db :as db]
             [api.routes :as routes]
@@ -19,9 +20,13 @@
 (defn read-config [profile]
   (aero/read-config "config.edn" {:profile profile}))
 
+(defn resolve-github-secret [config]
+  (or (-> config :api/config :github-token)
+      (System/getenv "GITHUB_TOKEN")))
+
 (def system-config
   {:api/config  {}
-   :api/jetty   {:port    4000
+   :api/jetty   {:port    8080
                  :join?   false
                  :handler (ig/ref :api/handler)}
    :api/handler {:config (ig/ref :api/config)}
@@ -29,7 +34,7 @@
 
 (defmethod ig/init-key :api/config [_ _]
   ;; can be set :prod or :test to load diff configs at runtime
-  (read-config :dev))
+  (read-config (or (-> "ENVIRONMENT" (System/getenv) keyword) :dev)))
 
 (defmethod ig/init-key :api/jetty [_ {:keys [port join? handler]}]
   (log/info (format "server listening on port: %d" port))
@@ -45,7 +50,7 @@
     [routes/ping
      routes/swagger
      routes/api]
-    {:data {:github-token (-> config :api/config :github-token)
+    {:data {:github-token (resolve-github-secret config)
             :coercion reitit.coercion.schema/coercion
             :muuntaja    m/instance
             :middleware  [parm/parameters-middleware
@@ -62,7 +67,7 @@
      {:not-found (constantly {:status 404 :body "route not found"})}))))
 
 (defmethod ig/init-key :api/tasks [_ {:keys [config]}]
-  (api.cron/start (-> config :api/config :github-token)
+  (api.cron/start (resolve-github-secret config)
                   (-> config :api/config :refresh-interval)))
 
 (defn run-migrations [args]
@@ -70,5 +75,8 @@
     "up" (db/create-releases-table! db/config)
     "down" (db/drop-releases-table! db/config)))
 
+(defmethod ig/prep-key :api/jetty [_ config]
+   (merge {:port 8080} config))
+
 (defn -main []
-  (ig/init system-config))
+  (-> system-config ig/prep ig/init))
