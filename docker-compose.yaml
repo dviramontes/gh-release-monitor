@@ -6,6 +6,8 @@ services:
       shipyard.init: "make migrations"
       shipyard.liveness.http.path: "/ping"
     build: "."
+    depends_on:
+      - postgres
     environment:
       ENVIRONMENT: "prod"
     ports:
