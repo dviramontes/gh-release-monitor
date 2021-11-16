@@ -6,4 +6,5 @@ WORKDIR /app
 COPY . ./
 RUN make jar
 CMD java -jar target/api.main-0.1.0-SNAPSHOT.jar
+
 EXPOSE 8080
