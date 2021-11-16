@@ -5,7 +5,7 @@ services:
       shipyard.route: "/"
       shipyard.init: "make migrations"
       shipyard.readiness.http.path: "/ping"
-      shipyard.liveness.http.initial_delay: 120
+      shipyard.liveness.http.initial_delay: 180
     build: "."
     depends_on:
       - postgres
