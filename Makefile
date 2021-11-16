@@ -14,7 +14,7 @@ backend.shell:
 	docker-compose run backend bash
 
 docker.run:
-	docker run -it --rm -f ./path/file -p 8080:8080 --env ENVIRONMENT=${ENVIRONMENT} --env GITHUB_TOKEN=${GITHUB_TOKEN} gh-release-monitor
+	docker run -it --rm -p 8080:8080 --env ENVIRONMENT=${ENVIRONMENT} --env GITHUB_TOKEN=${GITHUB_TOKEN} gh-release-monitor
 
 docker.build:
 	docker build --no-cache --build-arg ENVIRONMENT --build-arg GITHUB_TOKEN -t gh-release-monitor .
