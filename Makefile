@@ -43,7 +43,7 @@ lint:
 
 migrations:
 	@echo "running migrations"
-	clj -X:run-migrate
+	clj -X api.main/run-migrations-up
 
 format:
 	clj -M:cljfmt fix

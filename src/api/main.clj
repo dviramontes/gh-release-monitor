@@ -70,10 +70,8 @@
   (api.cron/start (resolve-github-secret config)
                   (-> config :api/config :refresh-interval)))
 
-(defn run-migrations [args]
-  (case (:direction args)
-    "up" (db/create-releases-table! db/config)
-    "down" (db/drop-releases-table! db/config)))
+(defn run-migrations-up [direction]
+  (db/create-releases-table! db/config))
 
 (defmethod ig/prep-key :api/jetty [_ config]
    (merge {:port 8080} config))
