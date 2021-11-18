@@ -70,7 +70,7 @@
   (api.cron/start (resolve-github-secret config)
                   (-> config :api/config :refresh-interval)))
 
-(defn run-migrations-up [direction]
+(defn run-migrations-up []
   (db/create-releases-table! db/config))
 
 (defmethod ig/prep-key :api/jetty [_ config]
