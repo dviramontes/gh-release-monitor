@@ -3,7 +3,7 @@ services:
   backend:
     labels:
       shipyard.route: "/"
-      shipyard.init: "make migrations"
+#      shipyard.init: "make migrations"
       shipyard.readiness.http.path: "/ping"
       shipyard.liveness.http.initial_delay: 180
     build: "."
